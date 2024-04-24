@@ -1,0 +1,75 @@
+﻿kind: pipeline
+name: default
+
+steps:
+  - name: backend-tests
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    commands:
+      - cd backend
+      - dotnet test
+
+  - name: flyway-migrate-test
+    image: boxfuse/flyway
+    environment:
+      - FLYWAY_URL=jdbc:postgresql://your_test_server_ip:5432/tivogyll
+      - FLYWAY_USER=tivogyll
+      - FLYWAY_PASSWORD=D_aMUJJ9FWKwv0clIEsj4hoJzhuCf10E
+    commands:
+      - flyway migrate
+
+  - name: frontend-tests
+    image: node:14
+    commands:
+      - cd frontend
+      - npm install
+      - npm run test
+
+  - name: build-and-publish-backend
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    commands:
+      - cd backend
+      - dotnet publish -c Release -o ./publish
+
+  - name: build-frontend
+    image: node:14
+    commands:
+      - cd frontend
+      - npm install
+      - npm run build
+
+  - name: flyway-migrate-production
+    image: boxfuse/flyway
+    environment:
+      - FLYWAY_URL=jdbc:postgresql://your_production_server_ip:5432/tivogyll
+      - FLYWAY_USER=tivogyll
+      - FLYWAY_PASSWORD=D_aMUJJ9FWKwv0clIEsj4hoJzhuCf10E
+    commands:
+      - flyway migrate
+
+  - name: deploy-to-test
+    image: plugins/ssh
+    settings:
+      host: 203.0.113.10
+      user: admin
+      port: 22
+      target: /path/to/test/deployment
+      script:
+        - rsync -avz --delete ./backend admin@203.0.113.10:/path/to/test/deployment
+        - rsync -avz --delete ./frontend admin@203.0.113.10:/path/to/test/deployment
+        - rsync -avz --delete ./docker-compose.yml admin@203.0.113.10:/path/to/test/deployment
+        - ssh admin@203.0.113.10 "cd /path/to/test/deployment && docker-compose up -d"
+
+
+  - name: deploy-to-production
+    image: plugins/ssh
+    settings:
+      host: 198.51.100.5
+      user: admin
+      port: 22
+      target: /path/to/prod/deployment
+      script:
+        - rsync -avz --delete ./backend admin@198.51.100.5:/path/to/prod/deployment
+        - rsync -avz --delete ./frontend admin@198.51.100.5:/path/to/prod/deployment
+        - rsync -avz --delete ./docker-compose.yml admin@198.51.100.5:/path/to/prod/deployment
+        - ssh admin@198.51.100.5 "cd /path/to/prod/deployment && docker-compose up -d"
+  

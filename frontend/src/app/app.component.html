@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="form-group">
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount" [(ngModel)]="amount">
+  </div>
+  <div class="form-group">
+    <label for="fromCurrency">From Currency:</label>
+    <select id="fromCurrency" [(ngModel)]="fromCurrency">
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+      <option value="GBP">GBP</option>
+      <option value="JPY">JPY</option>
+      <option value="AUD">AUD</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="toCurrency">To Currency:</label>
+    <select id="toCurrency" [(ngModel)]="toCurrency">
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+      <option value="GBP">GBP</option>
+      <option value="JPY">JPY</option>
+      <option value="AUD">AUD</option>
+    </select>
+  </div>
+  <button (click)="convertCurrency()">Convert</button>
+
+  <div *ngIf="convertedAmount !== 0" class="conversion-result">
+    <p>{{ amount }} {{ fromCurrency }} is {{ convertedAmount }} {{ toCurrency }}</p>
+  </div>
+
+  <div *ngIf="conversionHistory.length > 0" class="history">
+    <h2>Conversion History</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+        <tr>
+          <th style="width: 20%;">Amount</th>
+          <th style="width: 20%;">From Currency</th>
+          <th style="width: 20%;">Converted Amount</th>
+          <th style="width: 20%;">To Currency</th>
+          <th style="width: 20%;">Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let record of conversionHistory">
+          <td>{{ record.amount }}</td>
+          <td>{{ record.fromCurrency }}</td>
+          <td>{{ record.convertedAmount }}</td>
+          <td>{{ record.toCurrency }}</td>
+          <td>{{ record.date }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="conversionHistory.length === 0" class="history">
+    <p>No conversion history available.</p>
+  </div>
+</div>

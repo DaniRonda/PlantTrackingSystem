@@ -1,0 +1,38 @@
+# Ignorar archivos específicos para el frontend
+/frontend/node_modules
+/frontend/dist
+/frontend/.env
+
+# Ignorar archivos específicos para el backend
+/backend/bin
+/backend/obj
+/backend/.env
+
+# Ignorar archivos generados por el sistema
+.vscode
+.DS_Store
+
+# Ignorar archivos de dependencias y caché de paquetes (puede variar según las herramientas utilizadas)
+# Node.js
+/node_modules
+
+# .NET
+/bin
+/obj
+
+# Carpeta de caché de NuGet
+/packages
+*.nupkg
+
+# Carpeta de caché de Visual Studio
+/.vs
+
+# Carpeta de caché de Rider
+.idea
+*.sln.iml
+
+# Logs y archivos temporales
+/logs
+/temp
+*.log
+

@@ -1,0 +1,44 @@
+﻿version: '3.7'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: frontend:latest
+    container_name: frontend
+    ports:
+      - "4200:4200"
+    networks:
+      - network
+
+  backend:
+    build:
+      context: Backend
+      dockerfile: Dockerfile
+    image: backend:latest
+    container_name: backend
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - database
+    networks:
+      - network
+
+  database:
+    image: postgres:latest
+    container_name: database
+    environment:
+      POSTGRES_DB: tivogyll
+      POSTGRES_USER: tivogyll
+      POSTGRES_PASSWORD: D_aMUJJ9FWKwv0clIEsj4hoJzhuCf10E
+    ports:
+      - "5432:5432"
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge

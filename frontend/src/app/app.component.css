@@ -1,0 +1,54 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.conversion-result {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.history {
+  margin-top: 40px;
+}
+
+.table-wrapper {
+  overflow-x: hidden; /* Cambiado de auto a hidden */
+}
+
+th {
+  position: relative;
+  padding-right: 10px; /* Espacio adicional para el control de redimensionamiento */
+}
+
+th::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -5px; /* Espacio adicional para el control de redimensionamiento */
+  bottom: 0;
+  width: 10px; /* Anchura del control de redimensionamiento */
+  cursor: col-resize; /* Cambia el cursor al pasar sobre el control */
+  background-color: transparent;
+}
+
+th:hover::after {
+  background-color: #ccc; /* Color de fondo del control al pasar el ratón */
+}
