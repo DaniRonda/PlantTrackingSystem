@@ -1,7 +1,7 @@
 ﻿namespace infrastructure;
 public class Utilities
-{/*
-    private static readonly Uri Uri = new Uri(Environment.GetEnvironmentVariable("pgconn")!);
+{
+    private static readonly Uri Uri = new Uri(Environment.GetEnvironmentVariable("database_url")!);
 
     public static readonly string
         ProperlyFormattedConnectionString = string.Format(
@@ -11,5 +11,5 @@ public class Utilities
             Uri.UserInfo.Split(':')[0],
             Uri.UserInfo.Split(':')[1],
             Uri.Port > 0 ? Uri.Port : 5432);
-*/
+
 }

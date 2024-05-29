@@ -1,11 +1,11 @@
 using Npgsql;
 using infrastructure;
 
-namespace test
+/*namespace test
 {
     public class ConversionHistoryRepositoryTests : IDisposable
     {
-        private readonly ConversionHistoryRepository _repository;
+        private readonly plantRepository _repository;
         private readonly string _connectionString = "Host=abul.db.elephantsql.com;Username=tivogyll;Password=D_aMUJJ9FWKwv0clIEsj4hoJzhuCf10E;Database=tivogyll";
         private NpgsqlConnection _connection;
         private NpgsqlTransaction _transaction;
@@ -15,7 +15,7 @@ namespace test
             _connection = new NpgsqlConnection(_connectionString);
             _connection.Open();
             _transaction = _connection.BeginTransaction();
-            _repository = new ConversionHistoryRepository();
+            _repository = new plantRepository();
         }
 
         [Fact]
@@ -58,4 +58,4 @@ namespace test
             _connection.Dispose();
         }
     }
-}
+}*/

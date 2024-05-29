@@ -1,61 +1,80 @@
-<div class="container">
-  <div class="form-group">
-    <label for="amount">Amount:</label>
-    <input type="number" id="amount" [(ngModel)]="amount">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Client</title>
+</head>
+<body>
+<div id="container">
+  <div id="sidebar">
+    <h2>Mis Plantas</h2>
+    <input type="text" placeholder="Filtrar plantas..." [(ngModel)]="filterText" (input)="applyFilter()">
+    <ul>
+      <!-- Lista de plantas -->
+      <li *ngFor="let plant of filteredPlants">
+        <div class="plant-item">
+          <button [ngClass]="{'selected': isSelectedPlant(plant), 'plant-btn': true}" (click)="showDetails(plant)">
+            {{ plant.plantName }}
+          </button>
+          <button class="round-btn delete-btn" (click)="deletePlant(plant.id)">
+            <span>✖</span>
+          </button>
+          <button class="round-btn edit-btn" (click)="openEditPlantPopup(plant)">
+            <span>&#x270E;</span>
+          </button>
+        </div>
+      </li>
+      <li>
+        <button class="round-btn add-btn" (click)="openAddPlantPopup()">
+          <span>+</span>
+        </button>
+      </li>
+    </ul>
   </div>
-  <div class="form-group">
-    <label for="fromCurrency">From Currency:</label>
-    <select id="fromCurrency" [(ngModel)]="fromCurrency">
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-      <option value="GBP">GBP</option>
-      <option value="JPY">JPY</option>
-      <option value="AUD">AUD</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="toCurrency">To Currency:</label>
-    <select id="toCurrency" [(ngModel)]="toCurrency">
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-      <option value="GBP">GBP</option>
-      <option value="JPY">JPY</option>
-      <option value="AUD">AUD</option>
-    </select>
-  </div>
-  <button (click)="convertCurrency()">Convert</button>
-
-  <div *ngIf="convertedAmount !== 0" class="conversion-result">
-    <p>{{ amount }} {{ fromCurrency }} is {{ convertedAmount }} {{ toCurrency }}</p>
-  </div>
-
-  <div *ngIf="conversionHistory.length > 0" class="history">
-    <h2>Conversion History</h2>
-    <div class="table-wrapper">
+  <div id="content">
+    <div id="header">
+      <form #form="ngForm">
+        <input id="datePicker" name="inputDateHiredData" [(ngModel)]="selectedDate" (change)="fetchDataByDate(selectedDate)" type="date">
+      </form>
+    </div>
+    <div id="plantDetails" *ngIf="selectedPlant">
+      <h2 id="plantName">{{ selectedPlant.plantName }}</h2>
+      <div class="realtime-data" id="realtimeData"></div>
       <table>
         <thead>
         <tr>
-          <th style="width: 20%;">Amount</th>
-          <th style="width: 20%;">From Currency</th>
-          <th style="width: 20%;">Converted Amount</th>
-          <th style="width: 20%;">To Currency</th>
-          <th style="width: 20%;">Date</th>
+          <th>Fecha y Hora</th>
+          <th>Temperatura</th>
+          <th>Humedad</th>
         </tr>
         </thead>
-        <tbody>
-        <tr *ngFor="let record of conversionHistory">
-          <td>{{ record.amount }}</td>
-          <td>{{ record.fromCurrency }}</td>
-          <td>{{ record.convertedAmount }}</td>
-          <td>{{ record.toCurrency }}</td>
-          <td>{{ record.date }}</td>
+        <tbody id="plantData">
+        <tr *ngFor="let data of plantData">
+          <td>{{ data.dateTime | date:'yyyy-MM-ddTHH:mm:ss' }}</td>
+          <td>{{ data.temperature }}</td>
+          <td>{{ data.humidity }}</td>
         </tr>
         </tbody>
       </table>
     </div>
   </div>
-
-  <div *ngIf="conversionHistory.length === 0" class="history">
-    <p>No conversion history available.</p>
-  </div>
 </div>
+
+<ng-container *ngIf="showAddPlantPopup">
+  <app-add-plant-popup
+    [showPopup]="showAddPlantPopup"
+    (closePopup)="closeAddPlantPopup()">
+  </app-add-plant-popup>
+</ng-container>
+
+<ng-container *ngIf="showEditPlantPopup">
+  <app-edit-plant-popup
+    [plant]="selectedPlant"
+    [showPopup]="showEditPlantPopup"
+    (closePopup)="closeEditPlantPopup()"
+    (updatePlant)="updatePlant($event)">
+  </app-edit-plant-popup>
+</ng-container>
+</body>
+</html>

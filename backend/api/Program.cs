@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 using infrastructure;
+using infrastructure.DataModels;
 using service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,27 +7,22 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddNpgsqlDataSource("postgres://tivogyll:D_aMUJJ9FWKwv0clIEsj4hoJzhuCf10E@abul.db.elephantsql.com/tivogyll",
+    builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+    builder.Services.AddNpgsqlDataSource("Host=abul.db.elephantsql.com;Username=tivogyll;Password=D_aMUJJ9FWKwv0clIEsj4hoJzhuCf10E;Database=tivogyll",
         dataSourceBuilder => dataSourceBuilder.EnableParameterLogging());
 }
 else if (builder.Environment.IsProduction())
 {
-    builder.Services.AddNpgsqlDataSource("postgres://tivogyll:D_aMUJJ9FWKwv0clIEsj4hoJzhuCf10E@abul.db.elephantsql.com/tivogyll");
+    builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+    builder.Services.AddNpgsqlDataSource("Host=abul.db.elephantsql.com;Username=tivogyll;Password=D_aMUJJ9FWKwv0clIEsj4hoJzhuCf10E;Database=tivogyll",
+        dataSourceBuilder => dataSourceBuilder.EnableParameterLogging());
+    
 }
 
-// Configuración de las tasas de conversión
-var rates = new Dictionary<string, decimal>
-{
-    {"USD", 1m},
-    {"EUR", 0.93m},
-    {"GBP", 0.76m},
-    {"JPY", 130.53m},
-    {"AUD", 1.31m}
-};
-builder.Services.AddSingleton(rates);
-
-builder.Services.AddSingleton<ConversionHistoryRepository>();
-builder.Services.AddSingleton<CurrencyConversionService>();
+builder.Services.AddSingleton<DataRecordRepository>();
+builder.Services.AddSingleton<DataRecordService>();
+builder.Services.AddSingleton<PlantRepository>();
+builder.Services.AddSingleton<PlantService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -41,6 +34,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -48,7 +42,7 @@ if (app.Environment.IsDevelopment())
 // Configuración de CORS
 app.UseCors(options =>
 {
-    options.WithOrigins("http://localhost:4200") // Especifica el origen permitido
+    options.WithOrigins("http://localhost:4200", "http://192.168.1.37")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();

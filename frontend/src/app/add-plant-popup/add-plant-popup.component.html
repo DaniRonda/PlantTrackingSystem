@@ -1,0 +1,16 @@
+﻿<div class="popup-background">
+  <div class="popup">
+    <h3>Nueva Planta</h3>
+    <div class="loginInfo" [formGroup]="createPlantForm">
+      <input formControlName="plantName" type="text" placeholder="Nombre de la planta">
+      <input formControlName="plantType" type="text" placeholder="Tipo de planta">
+      <input formControlName="location" type="text" placeholder="Ubicación de la planta">
+    </div>
+    <div class="foot">
+      <div class="buttons">
+        <button [disabled]="createPlantForm.invalid" class="add-btn" (click)="addPlant()">Agregar</button>
+        <button class="cancel-btn" (click)="onClose()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
