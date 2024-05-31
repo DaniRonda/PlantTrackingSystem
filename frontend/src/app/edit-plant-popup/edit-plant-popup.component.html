@@ -1,0 +1,14 @@
+<div class="popup-background" *ngIf="showPopup">
+  <div class="popup">
+    <h3>Editar Planta</h3>
+    <form [formGroup]="editPlantForm" (ngSubmit)="onSubmit()">
+      <input formControlName="plantName" type="text" placeholder="Nombre de la planta">
+      <input formControlName="plantType" type="text" placeholder="Tipo de planta">
+      <input formControlName="location" type="text" placeholder="Ubicación de la planta">
+      <div class="button-container">
+        <button type="submit" [disabled]="editPlantForm.invalid">Actualizar</button>
+        <button type="button" class="cancel-btn" (click)="onClose()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

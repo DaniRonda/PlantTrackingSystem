@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   plants: any[] = [];
   filteredPlants: any[] = [];
   selectedPlant: any = null;
@@ -17,6 +18,9 @@ export class AppComponent implements OnInit {
   showEditPlantPopup = false;
   realtimeData: any = null;
   filterText: string = '';
+  chart: any = null;
+
+  @ViewChild('myChart') myChart!: ElementRef<HTMLCanvasElement>;
 
   constructor(private http: HttpClient) {}
 
@@ -24,6 +28,11 @@ export class AppComponent implements OnInit {
     this.selectedDate = new Date().toISOString().split('T')[0]; // Inicializa con la fecha actual
     this.fetchPlants();
     this.setupWebSocket();
+  }
+
+  ngAfterViewInit() {
+    // Inicializar el gráfico después de que la vista esté cargada
+    this.initChart();
   }
 
   fetchPlants() {
@@ -40,7 +49,6 @@ export class AppComponent implements OnInit {
         }
       );
   }
-
 
   showDetails(plant: any) {
     this.selectedPlant = plant;
@@ -69,6 +77,7 @@ export class AppComponent implements OnInit {
         (data) => {
           console.log('Data fetched:', data);
           this.plantData = data;
+          this.updateChart();
         },
         (error) => {
           console.error('Error fetching data:', error);
@@ -179,7 +188,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-
   applyFilter() {
     const filterTextLower = this.filterText.toLowerCase();
     this.filteredPlants = this.plants.filter(plant =>
@@ -189,4 +197,72 @@ export class AppComponent implements OnInit {
     );
   }
 
+  initChart() {
+    if (this.myChart) {
+      const canvas = this.myChart.nativeElement;
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          this.chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: [],
+              datasets: [{
+                label: 'Temperature',
+                data: [],
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+              }, {
+                label: 'Humidity',
+                data: [],
+                borderColor: 'rgb(54, 162, 235)',
+                tension: 0.1
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                x: {
+                  type: 'time',
+                  time: {
+                    unit: 'minute'
+                  },
+                  title: {
+                    display: true,
+                    text: 'Date and Time'
+                  }
+                },
+                y: {
+                  title: {
+                    display: true,
+                    text: 'Value'
+                  }
+                }
+              }
+            }
+          });
+        } else {
+          console.error('Failed to get 2D context');
+        }
+      } else {
+        console.error('Canvas element is undefined');
+      }
+    } else {
+      console.error('Element with ViewChild is undefined');
+    }
+  }
+
+
+  updateChart() {
+    if (this.chart) {
+      const labels = this.plantData.map(data => data.dateTime);
+      const temperatureData = this.plantData.map(data => data.temperature);
+      const humidityData = this.plantData.map(data => data.humidity);
+
+      this.chart.data.labels = labels;
+      this.chart.data.datasets[0].data = temperatureData;
+      this.chart.data.datasets[1].data = humidityData;
+      this.chart.update();
+    }
+  }
 }

@@ -1,0 +1,21 @@
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\bin\Debug\net8.0\web-socket- server.exe
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\bin\Debug\net8.0\web-socket- server.deps.json
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\bin\Debug\net8.0\web-socket- server.runtimeconfig.json
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\bin\Debug\net8.0\web-socket- server.dll
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\bin\Debug\net8.0\web-socket- server.pdb
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\bin\Debug\net8.0\Fleck.dll
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-socket- server.csproj.AssemblyReference.cache
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-socket- server.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-socket- server.AssemblyInfoInputs.cache
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-socket- server.AssemblyInfo.cs
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-socket- server.csproj.CoreCompileInputs.cache
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-socket- server.sourcelink.json
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-sock.FC7E16AD.Up2Date
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-socket- server.dll
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\refint\web-socket- server.dll
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-socket- server.pdb
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\web-socket- server.genruntimeconfig.cache
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\obj\Debug\net8.0\ref\web-socket- server.dll
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\danie\Desktop\PlantTrackingSystem\websocket-server\web-socket- server\web-socket- server\bin\Debug\net8.0\Npgsql.dll

@@ -12,6 +12,6 @@ export let options = {
 };
 
 export default function () {
-    http.get('http://localhost:5000/api/Conversion/history');
+    http.get('http://localhost:5000/api/DataRecord/data');
     sleep(1);
 }

@@ -1,0 +1,80 @@
+﻿name: CI Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies for TestCafe
+        run: npm install
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Install dependencies for .NET
+        run: dotnet restore
+
+      - name: Install k6
+        run: sudo apt-get install k6
+
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: tivogyll
+          POSTGRES_PASSWORD: D_aMUJJ9FWKwv0clIEsj4hoJzhuCf10E
+          POSTGRES_DB: tivogyll
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run unit tests
+        run: dotnet test backend/test/ConversionHistoryRepositoryTests.cs
+      - name: Run unit tests
+        run: dotnet test backend/test/DataRecordRepositoryTests.cs
+
+      - name: Run E2E tests
+        run: npm test -- backend/e2eTest.js
+
+      - name: Run k6 spike test
+        run: k6 run backend/spike-test.js
+
+      - name: Run k6 stress test
+        run: k6 run backend/stress-test.js
+
+  report:
+    needs: [test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: path/to/reports

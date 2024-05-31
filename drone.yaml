@@ -2,6 +2,24 @@
 name: default
 
 steps:
+  - name: checkout
+    image: alpine/git
+    commands:
+      - git clone https://github.com/tu-repo/proyecto.git .
+
+  - name: backend-static-code-analysis
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    commands:
+      - cd backend
+      - dotnet format
+
+  - name: frontend-static-code-analysis
+    image: node:14
+    commands:
+      - cd frontend
+      - npm install
+      - npm run lint
+
   - name: backend-tests
     image: mcr.microsoft.com/dotnet/sdk:8.0
     commands:
@@ -47,29 +65,48 @@ steps:
       - flyway migrate
 
   - name: deploy-to-test
-    image: plugins/ssh
+    image: appleboy/drone-ssh
     settings:
       host: 203.0.113.10
       user: admin
       port: 22
-      target: /path/to/test/deployment
       script:
-        - rsync -avz --delete ./backend admin@203.0.113.10:/path/to/test/deployment
-        - rsync -avz --delete ./frontend admin@203.0.113.10:/path/to/test/deployment
+        - rsync -avz --delete ./backend/publish admin@203.0.113.10:/path/to/test/deployment/backend
+        - rsync -avz --delete ./frontend/dist admin@203.0.113.10:/path/to/test/deployment/frontend
         - rsync -avz --delete ./docker-compose.yml admin@203.0.113.10:/path/to/test/deployment
         - ssh admin@203.0.113.10 "cd /path/to/test/deployment && docker-compose up -d"
 
-
   - name: deploy-to-production
-    image: plugins/ssh
+    image: appleboy/drone-ssh
     settings:
       host: 198.51.100.5
       user: admin
       port: 22
-      target: /path/to/prod/deployment
       script:
-        - rsync -avz --delete ./backend admin@198.51.100.5:/path/to/prod/deployment
-        - rsync -avz --delete ./frontend admin@198.51.100.5:/path/to/prod/deployment
+        - rsync -avz --delete ./backend/publish admin@198.51.100.5:/path/to/prod/deployment/backend
+        - rsync -avz --delete ./frontend/dist admin@198.51.100.5:/path/to/prod/deployment/frontend
         - rsync -avz --delete ./docker-compose.yml admin@198.51.100.5:/path/to/prod/deployment
         - ssh admin@198.51.100.5 "cd /path/to/prod/deployment && docker-compose up -d"
-  
+
+  - name: restart-watchtower-test
+    image: appleboy/drone-ssh
+    settings:
+      host: 203.0.113.10
+      user: admin
+      port: 22
+      script:
+        - ssh admin@203.0.113.10 "docker restart watchtower"
+
+  - name: restart-watchtower-production
+    image: appleboy/drone-ssh
+    settings:
+      host: 198.51.100.5
+      user: admin
+      port: 22
+      script:
+        - ssh admin@198.51.100.5 "docker restart watchtower"
+
+trigger:
+  event:
+    - push
+    - pull_request
